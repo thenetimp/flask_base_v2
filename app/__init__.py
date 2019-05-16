@@ -3,9 +3,11 @@ from flask import request, session, redirect, url_for, jsonify
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 # Define objects.
 db = SQLAlchemy()
+migrate = Migrate()
 bcrypt = Bcrypt()
 # login_manager = LoginManager()
 
@@ -20,6 +22,7 @@ def create_app(enviroment="dev"):
   # from app.models import User
   import app.models
 
+  # Create the flask api application
   app = FlaskAPI(__name__)
 
   # Configuration Information should move to file.
@@ -28,17 +31,19 @@ def create_app(enviroment="dev"):
   else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/dev_database.db'
 
-
   app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
   app.config['SECRET_KEY'] = 'super-secret'
+
+  # Instanciate the JWTManager
+  JWTManager(app)
 
   # Make sure the database initializes the app
   db.app = app
   db.init_app(app)
-  db.create_all()
+  migrate.init_app(app, db)
 
-  # Instanciate the JWTManager
-  JWTManager(app)
+  # Return the application
+  return app
 
   @app.errorhandler(500)
   def internal_error(error):
