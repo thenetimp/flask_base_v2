@@ -45,6 +45,7 @@ def create_app(enviroment="dev"):
   # Return the application
   return app
 
+
   @app.errorhandler(500)
   def internal_error(error):
     return { 'status': 'error', 'code': 'error_fatal_error', 'message': 'A fatal error has occured please check the logs for more information' }
@@ -55,6 +56,7 @@ def create_app(enviroment="dev"):
   @app.route('/')
   def main():
     return { 'status': 'error', 'code': 'error_invalid_endpoint', 'message': 'This is an invalid endpoint' }
+
 
   # Load the blueprints
   load_blueprints(app)
