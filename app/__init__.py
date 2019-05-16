@@ -11,18 +11,24 @@ bcrypt = Bcrypt()
 
 
 # Create the flash app
-def create_app():
+def create_app(enviroment="dev"):
 
   # Import the models so the database can be created
   # I am not crazy about this being here.  Hoping to
   # find a way to import all of them in one go within
   # the function.
-  from app.models import User
+  # from app.models import User
+  import app.models
 
   app = FlaskAPI(__name__)
 
   # Configuration Information should move to file.
-  app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+  if enviroment == "test":
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test_database.db'
+  else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/dev_database.db'
+
+
   app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
   app.config['SECRET_KEY'] = 'super-secret'
 
