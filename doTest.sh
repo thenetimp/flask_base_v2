@@ -1,3 +1,6 @@
 #!/bin/sh
 
-python -m unittest tests/tests_models.py
+export FLASK_APP="test_app.py"
+flask db upgrade
+
+python -m unittest app/tests/tests_models.py

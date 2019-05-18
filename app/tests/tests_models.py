@@ -10,17 +10,6 @@ class ModelTest(TestCase):
     print("Creating the flask app")
     return create_app("test")
 
-  # Setup the database
-  def setUp(self):
-    print("Setting up the database")
-    user_db.create_all()
-
-  # Teardown the database
-  def tearDown(self):
-    print("Tearing down the database")
-    user_db.session.remove()
-    user_db.drop_all()
-
   def test_user_model(self):
 
     # Define variables for tests
@@ -77,7 +66,3 @@ class ModelTest(TestCase):
 
     # Make sure the user doesn't exist
     self.assertEqual(user.password_reset_token, '')
-
-
-
-    return True
